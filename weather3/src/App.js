@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Moment from "moment";
+// import tz from "zipcode_to_timezone";
 import "./App.css";
 
 // console.log(process.env.REACT_APP_GOOGLE_API_KEY);
@@ -8,6 +10,16 @@ class App extends React.Component {
     temperature: undefined,
     city: undefined,
     description: undefined,
+  };
+
+  //create a function for time
+  updateTime = () => {
+    // let tz = zipcode_to_timezone.lookup("94110");
+    // console.log(tz);
+    const now = Moment().format("MMMM Do YYYY, h:mm a");
+    this.setState({
+      time: now,
+    });
   };
 
   //create a function to get the data
@@ -29,6 +41,7 @@ class App extends React.Component {
           city: data.name,
           description: data.weather[0].description,
         });
+        this.updateTime();
       })
       .catch((err) => {
         console.log("Not a valid Zipcode!");
@@ -49,6 +62,7 @@ class App extends React.Component {
         <p>{this.state.temperature}</p>
         <p>{this.state.city}</p>
         <p>{this.state.description}</p>
+        <p id="clock">{this.state.time}</p>
       </div>
     );
   }
