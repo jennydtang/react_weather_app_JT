@@ -1,25 +1,26 @@
 import React, { Component } from "react";
 import Moment from "moment";
-// import tz from "zipcode_to_timezone";
+import "moment-timezone";
 import "./App.css";
 
-// console.log(process.env.REACT_APP_GOOGLE_API_KEY);
-
 class App extends React.Component {
+  //create a function for time
+  updateTime = () => {
+    //set interval inside time function
+    setInterval(() => {
+      const now = Moment()
+        .utcOffset(this.state.timezone / 60) //divide by 60 to convert min to hrs
+        .format("MMMM Do YYYY, h:mm a");
+      this.setState({
+        time: now,
+      });
+    }, 1000);
+  };
+
   state = {
     temperature: undefined,
     city: undefined,
     description: undefined,
-  };
-
-  //create a function for time
-  updateTime = () => {
-    // let tz = zipcode_to_timezone.lookup("94110");
-    // console.log(tz);
-    const now = Moment().format("MMMM Do YYYY, h:mm a");
-    this.setState({
-      time: now,
-    });
   };
 
   //create a function to get the data
@@ -30,7 +31,8 @@ class App extends React.Component {
     fetch(
       "https://api.openweathermap.org/data/2.5/weather?zip=" +
         zip +
-        ",us&appid=b278274f83cd4f81b715ce235212c73c"
+        ",us&appidus&units=imperial&appid=" +
+        process.env.REACT_APP_API_KEY
     )
       //create a callback
       .then((response) => response.json())
@@ -40,6 +42,7 @@ class App extends React.Component {
           temperature: data.main.temp,
           city: data.name,
           description: data.weather[0].description,
+          timezone: data.timezone,
         });
         this.updateTime();
       })
