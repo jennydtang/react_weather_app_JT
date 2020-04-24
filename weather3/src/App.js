@@ -43,7 +43,10 @@ class App extends React.Component {
           city: data.name,
           description: data.weather[0].description,
           timezone: data.timezone,
+          iconURL:
+            "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
         });
+
         this.updateTime();
       })
       .catch((err) => {
@@ -59,12 +62,17 @@ class App extends React.Component {
   //render the items to the page
   render() {
     return (
-      <div>
-        <input type="text" id="inputZip" placeholder="zipcode"></input>
-        <button onClick={this.updateWeather}>Click me</button>
-        <p>{this.state.temperature}</p>
-        <p>{this.state.city}</p>
-        <p>{this.state.description}</p>
+      <div class="container">
+        <h3>What's the weather like?</h3>
+        <div class="container2">
+          <p>Enter Your Zipcode Below:</p>
+          <input type="text" id="inputZip" placeholder="zipcode"></input>
+          <button onClick={this.updateWeather}>Click me</button>
+          <p>{this.state.temperature} °F</p>
+          <p>{this.state.city}</p>
+          <p>{this.state.description}</p>
+          <img src={this.state.iconURL} alt=""></img>
+        </div>
         <p id="clock">{this.state.time}</p>
       </div>
     );
